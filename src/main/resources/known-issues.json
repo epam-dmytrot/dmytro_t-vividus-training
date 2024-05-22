@@ -1,2 +1,16 @@
 {
+	"BUG-001": {
+		"type": "Internal",
+		"assertionPattern": ".*Expected: \"https:\\/\\/www.saucedemo.com\\/inventory.html\" Actual: was \"https:\\/\\/www.saucedemo.com\\/\".*",
+		"stepPattern": "Then \\`\\$\\{current-page-url\\}\\` is equal to \\`https:\\/\\/www.saucedemo.com\\/inventory.html\\`",
+		"scenarioPattern": "Log in as Locked User.*",
+		"description": "User login to be fixed in the upcoming release"
+	},
+	"BUG-002": {
+		"type": "Internal",
+		"assertionPattern": ".*Expected: number of elements is a value greater than \\<0\\> Actual: \\<0\\>.*",
+		"stepPattern": ".*each element with locator \\`className\\(inventory_container\\)\\` has \\`6\\` child elements with locator \\`className\\(inventory_item\\)\\`*",
+		"scenarioPattern": "Log in as Locked User.*",
+		"description": "User login to be fixed in the upcoming release"
+	}
 }
