@@ -1,2 +1,9 @@
 {
+	"BUG-001": {
+		"type": "Internal",
+		"assertionPattern": ".*Expected: a string matching the pattern \\'Thank you\\.\\' Actual: was \"Thank you for your order.*",
+		"stepPattern": "Then \\`\\$\\{thankYou\\}\\` matches \\`\\$\\{message\\}\\`",
+		"scenarioPattern": "Validate order summary and complete order.*",
+		"description": "Completion message to be changed in the upcoming release"
+	}
 }
