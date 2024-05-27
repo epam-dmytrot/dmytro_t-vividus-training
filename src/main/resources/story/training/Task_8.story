@@ -33,6 +33,10 @@ Then each element with locator `className(cart_list)` has `2` child elements wit
 When I take screenshot
 
 When I click on element located by `name(Checkout)`
+When I ${baselineAction} baseline with name `checkoutOne` ignoring:
+|ACCEPTABLE_DIFF_PERCENTAGE	|
+|5							|
+
 When I enter `${checkoutFirstName}` in field located by `id(first-name)`
 When I enter `${checkoutLastName}` in field located by `id(last-name)`
 When I enter `${postalCode}` in field located by `id(postal-code)`
@@ -41,6 +45,9 @@ When I take screenshot
 Scenario: Validate order summary and complete order
 Given I initialize STORY variable `message` with value `#{loadResource(/data/message.txt)}`
 When I click on element located by `name(Continue)`
+When I ${baselineAction} baseline with name `checkoutTwo` ignoring:
+|ACCEPTABLE_DIFF_PERCENTAGE	|
+|5							|
 When I take screenshot
 
 !-- Getting subtotal from UI
@@ -57,7 +64,7 @@ Given I initialize story variable `tax` with value `#{round(#{eval(subtotalUiInt
 !-- Calculate Total (subtotal + tax)
 Given I initialize story variable `totalCalculated` with value `#{eval(${subtotalUiInt}+${tax})}`
 
-!-- Total/Subtotal verification 
+!-- Total/Subtotal verification
 Then `${checkoutPrice}` matches `${subtotalUiInt}`
 Then `${totalCalculated}` matches `${totalUiInt}`
 
@@ -66,4 +73,3 @@ When I click on element located by `name(Finish)`
 When I take screenshot
 When I save text of element located by `className(complete-header)` to story variable `thankYou`
 Then `${thankYou}` matches `${message}`
-
