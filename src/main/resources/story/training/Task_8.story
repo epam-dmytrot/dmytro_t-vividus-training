@@ -9,19 +9,15 @@ Scenario: Log In
 When I login with ${swagGoodUserName} and ${swagPassword}
 
 Scenario: Add items to the shopping cart
-!-- Select cheapest item
-When I select `Price (low to high)` in dropdown located `name(product_sort_container)`
-When I click on element located by `xpath(/html/body/div/div/div/div[2]/div/div/div/div[1]/div[2]/div[2]/button)`
-When I save text of element located by `xpath(/html/body/div/div/div/div[2]/div/div/div/div[1]/div[2]/div[2]/div)` to story variable `cheapest`
-
-!-- Select expensive  item
-When I select `Price (high to low)` in dropdown located `name(product_sort_container)`
-When I click on element located by `xpath(/html/body/div/div/div/div[2]/div/div/div/div[1]/div[2]/div[2]/button)`
-When I save text of element located by `xpath(/html/body/div/div/div/div[2]/div/div/div/div[1]/div[2]/div[2]/div)` to story variable `expensive`
-
-!-- Calculate Checkout Price
-Given I initialize story variable `checkoutPrice` with value `#{round(#{eval(#{substringAfter(${cheapest},$)} + #{substringAfter(${expensive},$)})}, 2)}`
-When I take screenshot
+When I select `<sortingValue>` in dropdown located `name(product_sort_container)`
+When I click on element located by `xpath(//*[@id="inventory_container"]/div/div[1]/div[2]/div[2]/button)`
+!-- I click on element located by `xpath(//*[@id="inventory_container"]/div/div[last()]/div[2]/div[2]/button)`
+When I wait until element located by `xpath(//*[@id="shopping_cart_container"]/a/span)` has text matching `<cartBadgeCount>`
+When I save text of element located by `xpath(//*[@id="inventory_container"]/div/div[1]/div[2]/div[2]/div)` to story variable `<price>`
+Examples:
+|sortingValue			|cartBadgeCount	|price		|
+|Price (low to high)	|1				|cheapest	|
+|Price (high to low)	|2				|expensive	|
 
 Scenario: Populate checkout data
 Given I initialize story variable `checkoutFirstName` with value `#{generate(Name.firstName)}`
@@ -64,8 +60,13 @@ Given I initialize story variable `tax` with value `#{round(#{eval(subtotalUiInt
 !-- Calculate Total (subtotal + tax)
 Given I initialize story variable `totalCalculated` with value `#{eval(${subtotalUiInt}+${tax})}`
 
-!-- Total/Subtotal verification
-Then `${checkoutPrice}` matches `${subtotalUiInt}`
+!-- Subtotal verification
+Then `#{round(#{eval(#{substringAfter(${cheapest},$)} + #{substringAfter(${expensive},$)})}, 2)}` is = `${subtotalUiInt}`
+
+!-- Total verification (I used 4 different approaches just for practicing)
+Then `#{eval(#{eval(${subtotalUiInt}+${tax})}==${totalUiInt})}` is = `true`
+Then `#{eval(${subtotalUiInt}+${tax})}` is = `${totalUiInt}`
+Then `#{eval(${subtotalUiInt}+${tax}==${totalUiInt})}` is = `true`
 Then `${totalCalculated}` matches `${totalUiInt}`
 
 When I take screenshot
